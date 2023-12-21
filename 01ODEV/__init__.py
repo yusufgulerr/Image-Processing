@@ -1,22 +1,31 @@
-import cv2
 import numpy as np
+from sklearn.preprocessing import StandardScaler
 
-def intensity_slicing(image_path, lower_threshold, upper_threshold):
-
-    img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-
-    mask = cv2.inRange(img, lower_threshold, upper_threshold)
-    result = cv2.bitwise_and(img, img, mask=mask)
+data = np.array([[1.0, 2.0, 3.0],
+                 [4.0, 5.0, 6.0],
+                 [7.0, 8.0, 9.0]])
 
 
-    cv2.imshow('Original Image', img)
-    cv2.imshow('Intensity Sliced Image', result)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+scaler = MinMaxScaler()
+
+normalized_data = scaler.fit_transform(data)
+
+print("Original Data:")
+print(data)
+print("\nNormalized Data:")
+print(normalized_data)
 
 
-image_path = r'C:\Users\yusuf\PycharmProjects\pythonProject\images\kahve.jpg'
-lower_threshold = 100
-upper_threshold = 200
+data = np.array([[1.0, 2.0, 3.0],
+                 [4.0, 5.0, 6.0],
+                 [7.0, 8.0, 9.0]])
 
-intensity_slicing(image_path, lower_threshold, upper_threshold)
+scaler = StandardScaler()
+
+# Standardize the data
+standardized_data = scaler.fit_transform(data)
+
+print("Original Data:")
+print(data)
+print("\nStandardized Data:")
+print(standardized_data)

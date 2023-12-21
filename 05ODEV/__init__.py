@@ -1,30 +1,18 @@
 import cv2
 import numpy as np
-from matplotlib import pyplot as plt
 
-def apply_gaussian_filter(image, kernel_size, sigma):
-    blurred_image = cv2.GaussianBlur(image, (kernel_size, kernel_size), sigma)
-    return blurred_image
+def adjust_gamma(image_path, gamma=1.0):
+    original_image = cv2.imread(image_path)
 
-if __name__ == "__main__":
-    # Load the image in grayscale
-    image_path = r'C:\Users\yusuf\PycharmProjects\pythonProject\images\zebra.jpg'
-    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    gamma_corrected = np.power(original_image / float(np.max(original_image)), gamma) * 255.0
+    gamma_corrected = np.uint8(gamma_corrected)
 
-    if image is None:
-        print("Error: Couldn't open or read the image.")
-    else:
-        blurred_image = apply_gaussian_filter(image, kernel_size=5, sigma=1)
+    cv2.imshow('Original Image', original_image)
+    cv2.imshow('Gamma Corrected Image', gamma_corrected)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
-        plt.figure(figsize=(8, 4))
+image_path = r'/images/castle.jpg'
 
-        plt.subplot(1, 2, 1)
-        plt.imshow(image, cmap='gray')
-        plt.title('Original Image')
-        plt.axis('off')
-
-        plt.subplot(1, 2, 2)
-        plt.imshow(blurred_image, cmap='gray')
-        plt.axis('off')
-
-        plt.show()
+gamma_value = 1.5
+adjust_gamma(image_path, gamma_value)

@@ -1,55 +1,37 @@
 import cv2
 import numpy as np
-
-img = cv2.imread(r'C:\Users\yusuf\PycharmProjects\pythonProject\images\castle.jpg',0)
-cv2.imshow("Original",img)
-cv2.waitKey(0)
-
-kernel = np.ones((5,5),dtype=np.uint8)
-
-whiteNoise = np.random.randint(0,2,size=img.shape[:2])
-
-whiteNoise = whiteNoise*255
-noise_img = whiteNoise + img
-
-opening = cv2.morphologyEx(noise_img.astype(np.float32),cv2.MORPH_OPEN,kernel)
-cv2.imshow("Opening",opening)
-cv2.waitKey(0)
-
-img2 = cv2.imread(r'C:\Users\yusuf\PycharmProjects\pythonProject\images\castle.jpg',0)
-cv2.imshow("Original",img)
-cv2.waitKey(0)
-
-kernel = np.ones((5,5),dtype=np.uint8)
-
-blackNoise = np.random.randint(0,2,size=img.shape[:2])
-
-blackNoise = blackNoise*-255
-noise_img = blackNoise + img
-noise_img[noise_img<=-245] = 0
-closing = cv2.morphologyEx(noise_img.astype(np.float32),cv2.MORPH_CLOSE,kernel)
-cv2.imshow("Opening",opening)
-cv2.waitKey(0)
+from matplotlib import pyplot as plt
 
 
+image_path = r'/images/building.jpg'
+original_image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+
+if original_image is None:
+    print("Error: Couldn't open or read the image.")
+else:
+
+    blurred_image = cv2.GaussianBlur(original_image, (3, 3), 0)
 
 
+    gray_image = cv2.cvtColor(blurred_image, cv2.COLOR_BGR2GRAY)
 
 
+    laplace_filtered_image = cv2.Laplacian(gray_image, cv2.CV_16S)
 
 
+    laplace_filtered_image = cv2.convertScaleAbs(laplace_filtered_image)
 
 
+    plt.figure(figsize=(8, 4))
 
+    plt.subplot(1, 2, 1)
+    plt.imshow(cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB))
+    plt.title('Original Image')
+    plt.axis('off')
 
+    plt.subplot(1, 2, 2)
+    plt.imshow(laplace_filtered_image, cmap='gray')
+    plt.title('Sharpened Image (Laplace + Gaussian)')
+    plt.axis('off')
 
-
-
-
-
-
-
-
-
-
-
+    plt.show()
